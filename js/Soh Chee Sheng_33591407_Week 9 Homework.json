@@ -36,7 +36,7 @@
       },
       {
         "data": {
-          "url": "https://raw.githubusercontent.com/jsoh06/FIT3179-Data-Visualisation-2/refs/heads/main/Week%209%20Homework/geoBoundaries-MYS-ADM2.topojson",
+          "url": "https://raw.githubusercontent.com/jsoh06/FIT3179-Data-Visualisation-2/refs/heads/main/data/geoBoundaries-MYS-ADM2.topojson",
           "format": {"type": "topojson", "feature": "MYSADM2gbOpen"}
         },
         "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
