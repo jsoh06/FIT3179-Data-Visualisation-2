@@ -181,9 +181,9 @@
         }
     },
     "tooltip": [
-        {"field": "year", "type": "ordinal", "title": "Year"},
-        {"field": "Train_Line_Label", "type": "nominal", "title": "Train Line"},
-        {"field": "Yearly_Ridership", "type": "quantitative", "title": "Number of Trips", "format": ","}
+        {"field": "Train_Line_Label", "type": "nominal", "title": "Train Line"},    
+        {"field": "Yearly_Ridership", "type": "quantitative", "title": "Number of Trips", "format": ","},
+        {"field": "year", "type": "ordinal", "title": "Year"}
                 ]
             }
         }

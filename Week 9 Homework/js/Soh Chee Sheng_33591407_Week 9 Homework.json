@@ -71,7 +71,9 @@
           },
           "tooltip": [
             {"field": "station_name", "title": "Station Name"},
-            {"field": "train_line", "title": "Train Line"}
+            {"field": "train_line", "title": "Train Line"},
+            {"field": "latitude_num", "title": "Latitude", "format": ".4f"},
+            {"field": "longitude_num", "title": "Longitude", "format": ".4f"}
           ]
         }
       },
