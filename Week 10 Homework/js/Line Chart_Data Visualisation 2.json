@@ -116,8 +116,8 @@
             }
         },
         "tooltip": [
-            {"field": "month_name", "type": "nominal", "title": "Month"},
             {"field": "Train_Line_Label", "type": "nominal", "title": "Train Line"},
+            {"field": "month_name", "type": "nominal", "title": "Month"},
             {"field": "Monthly_Ridership", "type": "quantitative", "title": "Number of Trips", "format": ","}
         ]
     }
