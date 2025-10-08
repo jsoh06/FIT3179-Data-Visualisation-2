@@ -144,7 +144,9 @@
             "type": "ordinal",
             "title": "Year",
             "axis": {
-                "labelAngle": 0
+                "labelAngle": 0,
+                "labelPadding": 10,
+                "titlePadding": 20
             }
         },
     "y": {
