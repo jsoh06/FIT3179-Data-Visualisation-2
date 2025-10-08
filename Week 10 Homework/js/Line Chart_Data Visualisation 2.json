@@ -1,14 +1,10 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": "container",
-    "height": 320,
-    "padding": {"top": 25, "bottom": 30, "left": 10, "right": 10},
-    "title": {
-        "text": "Ridership per Train Line (2021 - 2024)"
-    },
-
+    "width": 700,
+    "height": 300,
+    "title": "Ridership per Train Line (2021 - 2024)",
     "data": {
-        "url": "https://raw.githubusercontent.com/jsoh06/FIT3179-Data-Visualisation-2/refs/heads/main/Week%2010%20Homework/data/ridership_headline.csv"
+        "url": "https://raw.githubusercontent.com/jsoh06/FIT3179-Data-Visualisation-2/refs/heads/main/Week%2010%20Homework/ridership_headline.csv"
         },
     "params": [
         {
@@ -20,8 +16,21 @@
                 "labels": ["2021", "2022", "2023", "2024", "2021-2024 (Overall)"],
                 "name": "Select Year: "
             }
+        },
+        {
+            "name": "train_line_selection",
+            "select": {
+                "type": "point",
+                "fields": ["Train_Line_Label"]
+            },
+            "bind": "legend"
         }
     ],
+    "resolve": {
+        "scale": {
+            "color": "independent"
+        }
+    },
     "transform": [
         {
             "calculate": "time(datum.date)",
@@ -29,14 +38,14 @@
         },
         {
             "calculate": "year(datum.date_parsed)",
-            "as": "Year"
+            "as": "year"
         },
         {
             "calculate": "month(datum.date_parsed)",
-            "as": "Month"
+            "as": "month"
         },
         {
-            "calculate": "['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][datum.Month - 1]",
+            "calculate": "['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][datum.month - 1]",
             "as": "month_name"
         },
         {
@@ -56,138 +65,150 @@
             "as": "Train_Line_Label"
         }        
     ],
-        "layer": [
-            {
-                "transform": [
-                    {"filter": "year_selection != 'Overall'"},
-                    {"filter": "datum.Year == year_selection"},
-                     {
-                        "aggregate": [{
-                        "op": "sum",
-                        "field": "Ridership",
-                        "as": "Monthly_Ridership"
-                        }],
-                        "groupby": ["Year", "Month", "month_name", "Train_Line_Label"]
+    "layer": [
+        {
+            "transform": [
+                {"filter": "year_selection != 'Overall'"},
+                {"filter": "datum.year == year_selection"},
+                 {
+                    "aggregate": [{
+                    "op": "sum",
+                    "field": "Ridership",
+                    "as": "Monthly_Ridership"
+                    }],
+                    "groupby": ["year", "month", "month_name", "Train_Line_Label"]
+            }
+        ],
+        "mark": {
+            "type": "line",
+            "point": true
+        },
+        "encoding": {
+            "x": {
+                "field": "month",
+                "type": "quantitative",
+                "title": "Month",
+                "axis": {
+                    "tickCount": 12,
+                    "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                    "labelExpr": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][datum.value - 1]"
                 }
-    ],
-    "mark": {
-        "type": "line",
-        "point": true
-    },
-    "encoding": {
-        "x": {
-            "field": "month_name",
-            "type": "ordinal",
-            "title": "Month",
-            "sort": ["January","February","March","April","May","June","July","August","September","October","November","December"],
-            "axis": {
-              "labelAngle": 0,
-              "labelExpr": "substring(datum.value,0,3)"
-            }
-          },
-        "y": {
-            "field": "Monthly_Ridership",
-            "type": "quantitative",
-            "title": "Trip Count"
-        },
-        "color": {
-            "field": "Train_Line_Label",
-            "type": "nominal",
-            "title": "Train Line",
-            "scale": {
-                "domain": [
-                    "LRT Ampang Line",
-                    "MRT Kajang Line", 
-                    "LRT Kelana Jaya Line",
-                    "Monorail Line",
-                    "KTMB ETS",
-                    "KTM Intercity",
-                    "KTM Komuter Utara"
-                ],
-                "range": [
-                    "#e41a1c",
-                    "#377eb8",
-                    "#4daf4a",
-                    "#984ea3",
-                    "#ff7f00",
-                    "#ffff33",
-                    "#a65628"                   
-                ]
-            }
-        },
-        "tooltip": [
-            {"field": "Train_Line_Label", "type": "nominal", "title": "Train Line"},
-            {"field": "month_name", "type": "nominal", "title": "Month"},
-            {"field": "Monthly_Ridership", "type": "quantitative", "title": "Number of Trips", "format": ","}
-        ]
-    }
-},
-{
-    "transform": [
-        {"filter": "year_selection == 'Overall'"},
-        {"filter": "datum.Year >= 2021 && datum.Year <= 2024"},
-         {
-            "aggregate": [{
-            "op": "sum",
-            "field": "Ridership",
-            "as": "Yearly_Ridership"
-            }],
-            "groupby": ["Year", "Train_Line_Label"]
-        }
-    ],
-    "mark": {
-        "type": "line",
-        "point": true
-    },
-    "encoding": {
-        "x": {
-            "field": "Year",
-            "type": "ordinal",
-            "axis": {
-                "labelAngle": 0,
-                "labelPadding": 8,
-                "titlePadding": 15
-            }
-        },
-    "y": {
-        "field": "Yearly_Ridership",
-        "type": "quantitative",
-        "title": "Trip Count"
-    },
-    "color": {
-        "field": "Train_Line_Label",
-        "type": "nominal",
-        "title": "Train Line",
-        "scale": {
-            "domain": [
-                "LRT Ampang Line",
-                "MRT Kajang Line", 
-                "LRT Kelana Jaya Line",
-                "Monorail Line",
-                "KTMB ETS",
-                "KTM Intercity",
-                "KTM Komuter Utara"
-            ],
-            "range": [
-                "#e41a1c",
-                "#377eb8",
-                "#4daf4a",
-                "#984ea3",
-                "#ff7f00",
-                "#ffff33",
-                "#a65628"                   
+            },
+            "y": {
+                "field": "Monthly_Ridership",
+                "type": "quantitative",
+                "title": "Trip Count"
+            },
+            "color": {
+                "field": "Train_Line_Label",
+                "type": "nominal",
+                "title": "Train Line",
+                "scale": {
+                    "domain": [
+                        "LRT Ampang Line",
+                        "MRT Kajang Line", 
+                        "LRT Kelana Jaya Line",
+                        "Monorail Line",
+                        "KTMB ETS",
+                        "KTM Intercity",
+                        "KTM Komuter Utara"
+                    ],
+                    "range": [
+                        "#e41a1c",
+                        "#377eb8",
+                        "#4daf4a",
+                        "#984ea3",
+                        "#ff7f00",
+                        "#ffff33",
+                        "#a65628"                   
+                    ]
+                }
+            },
+            "opacity": {
+                "condition": {
+                    "param": "train_line_selection",
+                    "value": 1.0
+                },
+                "value": 0.2
+            },
+            "tooltip": [
+                {"field": "month_name", "type": "nominal", "title": "Month"},
+                {"field": "Train_Line_Label", "type": "nominal", "title": "Train Line"},
+                {"field": "Monthly_Ridership", "type": "quantitative", "title": "Number of Trips", "format": ","}
             ]
         }
     },
-    "tooltip": [
-        {"field": "Train_Line_Label", "type": "nominal", "title": "Train Line"},    
-        {"field": "Yearly_Ridership", "type": "quantitative", "title": "Number of Trips", "format": ","},
-        {"field": "Year", "type": "ordinal", "title": "Year"}
-                ]
+    {
+        "transform": [
+            {"filter": "year_selection == 'Overall'"},
+            {"filter": "datum.year >= 2021 && datum.year <= 2024"},
+             {
+                "aggregate": [{
+                "op": "sum",
+                "field": "Ridership",
+                "as": "Yearly_Ridership"
+                }],
+                "groupby": ["year", "Train_Line_Label"]
             }
+        ],
+        "mark": {
+            "type": "line",
+            "point": true
+        },
+        "encoding": {
+            "x": {
+                "field": "year",
+                "type": "ordinal",
+                "title": "Year",
+                "axis": {
+                    "labelAngle": 0
+                }
+            },
+            "y": {
+                "field": "Yearly_Ridership",
+                "type": "quantitative",
+                "title": "Trip Count"
+            },
+            "color": {
+                "field": "Train_Line_Label",
+                "type": "nominal",
+                "title": "Train Line",
+                "scale": {
+                    "domain": [
+                        "LRT Ampang Line",
+                        "MRT Kajang Line", 
+                        "LRT Kelana Jaya Line",
+                        "Monorail Line",
+                        "KTMB ETS",
+                        "KTM Intercity",
+                        "KTM Komuter Utara"
+                    ],
+                    "range": [
+                        "#e41a1c",
+                        "#377eb8",
+                        "#4daf4a",
+                        "#984ea3",
+                        "#ff7f00",
+                        "#ffff33",
+                        "#a65628"                   
+                    ]
+                }
+            },
+            "opacity": {
+                "condition": {
+                    "param": "train_line_selection",
+                    "value": 1.0
+                },
+                "value": 0.2
+            },
+            "tooltip": [
+                {"field": "year", "type": "ordinal", "title": "Year"},
+                {"field": "Train_Line_Label", "type": "nominal", "title": "Train Line"},
+                {"field": "Yearly_Ridership", "type": "quantitative", "title": "Number of Trips", "format": ","}
+            ]
         }
-    
-]
+    }
+    ]
 }
 
 
