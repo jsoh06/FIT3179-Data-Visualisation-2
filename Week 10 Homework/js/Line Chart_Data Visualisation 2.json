@@ -1,7 +1,8 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
-    "height": 380,
+    "height": 320,
+    "padding": {"top": 50, "bottom": 60, "left": 10, "right": 10},
     "title": {
         "text": "Ridership per Train Line (2021 - 2024)"
     },
@@ -145,8 +146,8 @@
             "title": "Year",
             "axis": {
                 "labelAngle": 0,
-                "labelPadding": 10,
-                "titlePadding": 20
+                "labelPadding": 15,
+                "titlePadding": 25
             }
         },
     "y": {
