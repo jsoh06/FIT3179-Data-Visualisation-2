@@ -186,6 +186,30 @@
         {"field": "year", "type": "ordinal", "title": "Year"}
                 ]
             }
+        },
+        {
+            "transform": [
+                {"filter": "year_selection == 'Overall'"}
+            ],
+            "data": {
+                "values": [
+                    {"year": "2024", "annotation": "MRT Kajang", "y_position": 35000000}
+                ]
+            },
+            "mark": {
+                "type": "text",
+                "align": "right",
+                "baseline": "middle",
+                "dx": -5,
+                "fontSize": 10,
+                "fontWeight": "bold",
+                "color": "#377eb8"
+            },
+            "encoding": {
+                "x": {"field": "year", "type": "ordinal"},
+                "y": {"field": "y_position", "type": "quantitative"},
+                "text": {"field": "annotation", "type": "nominal"}
+            }
         }
     ]
 }
