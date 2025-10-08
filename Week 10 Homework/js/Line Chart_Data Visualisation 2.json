@@ -186,6 +186,30 @@
         {"field": "year", "type": "ordinal", "title": "Year"}
                 ]
             }
+        },
+        {
+            "transform": [
+                {"filter": "year_selection == 2021"}
+            ],
+            "data": {
+                "values": [
+                    {"month": 6, "ridership": 1200000, "note": "Summer Peak"}
+                ]
+            },
+            "mark": {
+                "type": "text",
+                "align": "left",
+                "baseline": "middle",
+                "dx": 5,
+                "fontSize": 10,
+                "fontWeight": "bold",
+                "color": "#333"
+            },
+            "encoding": {
+                "x": {"field": "month", "type": "quantitative"},
+                "y": {"field": "ridership", "type": "quantitative"},
+                "text": {"field": "note", "type": "nominal"}
+            }
         }
     ]
 }
