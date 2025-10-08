@@ -75,16 +75,12 @@
         "point": true
     },
     "encoding": {
-    "x": {
-        "field": "Month",
-        "type": "quantitative",
-        "title": "Month",
-        "axis": {
-            "tickCount": 12,
-            "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            "labelExpr": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][datum.value - 1]"
-        }
-    },
+        "x": {
+            "field": "month_name",
+            "type": "ordinal",
+            "title": "Month",
+            "sort": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        },
         "y": {
             "field": "Monthly_Ridership",
             "type": "quantitative",
