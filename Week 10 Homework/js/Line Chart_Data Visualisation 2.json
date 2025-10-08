@@ -1,11 +1,11 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": "container",
+    "width": 700,
     "height": 300,
     "title": "Ridership per Train Line (2021 - 2024)",
     "data": {
         "url": "https://raw.githubusercontent.com/jsoh06/FIT3179-Data-Visualisation-2/refs/heads/main/Week%2010%20Homework/data/ridership_headline.csv"
-    },
+        },
     "params": [
         {
             "name": "year_selection",
