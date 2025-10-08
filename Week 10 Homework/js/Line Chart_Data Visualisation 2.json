@@ -1,6 +1,6 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": 700,
+    "width": "container",
     "height": 300,
     "title": "Ridership per Train Line (2021 - 2024)",
     "data": {
