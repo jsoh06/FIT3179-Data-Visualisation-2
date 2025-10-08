@@ -77,7 +77,7 @@
     "encoding": {
     "x": {
         "field": "Month",
-        "type": "ordinal",
+        "type": "quantitative",
         "title": "Month",
         "axis": {
             "labelExpr": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][datum.value - 1]"
