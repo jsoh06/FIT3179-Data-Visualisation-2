@@ -5,6 +5,7 @@
     },
     "width": 750,
     "height": 400,
+    "title": "Ridership of Train Lines in Malaysia (2021 - 2024)",
     "params": [
       {
         "name": "rail_line_filter",
