@@ -1,193 +1,226 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": "container",
-    "height": 320,
-    "padding": {"top": 25, "bottom": 30, "left": 10, "right": 10},
-    "title": {
-        "text": "Ridership per Train Line (2021 - 2024)"
-    },
-
     "data": {
-        "url": "https://raw.githubusercontent.com/jsoh06/FIT3179-Data-Visualisation-2/refs/heads/main/Week%2010%20Homework/data/ridership_headline.csv"
-        },
+      "url": "https://raw.githubusercontent.com/jsoh06/FIT3179-Data-Visualisation-2/refs/heads/main/Week%2010%20Homework/data/ridership_headline.csv"
+    },
+    "width": 750,
+    "height": 400,
     "params": [
-        {
-            "name": "year_selection",
-            "value": 2021,
-            "bind": {
-                "input": "select",
-                "options": [2021, 2022, 2023, 2024, "Overall"],
-                "labels": ["2021", "2022", "2023", "2024", "2021-2024 (Overall)"],
-                "name": "Select Year: "
-            }
-        }
+      {
+        "name": "rail_line_filter",
+        "bind": {
+          "input": "select",
+          "options": [
+            "All",
+            "LRT Ampang Line",
+            "LRT Kelana Jaya Line", 
+            "Monorail Line",
+            "MRT Kajang Line",
+            "KTMB ETS",
+            "KTM Intercity",
+            "KTM Komuter"
+          ],
+          "name": "Select Train Line: "
+        },
+        "value": "All"
+      }
     ],
     "transform": [
-        {
-            "calculate": "time(datum.date)",
-            "as": "date_parsed"
-        },
-        {
-            "calculate": "year(datum.date_parsed)",
-            "as": "Year"
-        },
-        {
-            "calculate": "month(datum.date_parsed)",
-            "as": "Month"
-        },
-        {
-            "calculate": "['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][datum.Month - 1]",
-            "as": "month_name"
-        },
-        {
-            "fold": [
-                "rail_lrt_ampang",
-                "rail_mrt_kajang",
-                "rail_lrt_kj",
-                "rail_monorail",
-                "rail_ets",
-                "rail_intercity",
-                "rail_komuter_utara"
-            ],
-            "as": ["Train_Line", "Ridership"]
-        },
-        {
-            "calculate": "datum.Train_Line == 'rail_lrt_ampang' ? 'LRT Ampang Line' : datum.Train_Line == 'rail_lrt_kj' ? 'LRT Kelana Jaya Line' : datum.Train_Line == 'rail_monorail' ? 'Monorail Line' : datum.Train_Line == 'rail_mrt_kajang' ? 'MRT Kajang Line' : datum.Train_Line == 'rail_ets' ? 'KTMB ETS' : datum.Train_Line == 'rail_intercity' ? 'KTM Intercity' : datum.Train_Line == 'rail_komuter_utara' ? 'KTM Komuter Utara' : datum.Train_Line",
-            "as": "Train_Line_Label"
-        }        
+      {
+        "fold": [
+          "rail_lrt_ampang", 
+          "rail_mrt_kajang", 
+          "rail_lrt_kj", 
+          "rail_monorail", 
+          "rail_ets", 
+          "rail_intercity", 
+          "rail_komuter_utara"
+        ],
+        "as": ["rail_type", "ridership"]
+      },
+      {
+        "calculate": "timeParse(datum.date, '%d/%m/%Y')",
+        "as": "parsed_date"
+      },
+      {
+        "calculate": "datum.rail_type == 'rail_lrt_ampang' ? 'LRT Ampang Line' : datum.rail_type == 'rail_lrt_kj' ? 'LRT Kelana Jaya Line' : datum.rail_type == 'rail_monorail' ? 'Monorail Line' : datum.rail_type == 'rail_mrt_kajang' ? 'MRT Kajang Line' : datum.rail_type == 'rail_ets' ? 'KTMB ETS' : datum.rail_type == 'rail_intercity' ? 'KTM Intercity' : datum.rail_type == 'rail_komuter_utara' ? 'KTM Komuter' : datum.rail_type",
+        "as": "rail_line_name"
+      },
+      {
+        "filter": "rail_line_filter == 'All' || datum.rail_line_name == rail_line_filter"
+      }
     ],
-        "layer": [
-            {
-                "transform": [
-                    {"filter": "year_selection != 'Overall'"},
-                    {"filter": "datum.Year == year_selection"},
-                     {
-                        "aggregate": [{
-                        "op": "sum",
-                        "field": "Ridership",
-                        "as": "Monthly_Ridership"
-                        }],
-                        "groupby": ["Year", "Month", "month_name", "Train_Line_Label"]
-                }
-    ],
-    "mark": {
-        "type": "line",
-        "point": true
-    },
-    "encoding": {
-        "x": {
-            "field": "month_name",
-            "type": "ordinal",
-            "title": "Month",
-            "sort": ["January","February","March","April","May","June","July","August","September","October","November","December"],
-            "axis": {
-              "labelAngle": 0,
-              "labelExpr": "substring(datum.value,0,3)"
-            }
+    "layer": [
+      {
+        "mark": {
+          "type": "line",
+          "interpolate": "monotone",
+          "strokeWidth": 2
+        },
+        "encoding": {
+          "x": {
+            "field": "parsed_date",
+            "type": "temporal",
+            "timeUnit": "yearmonth",
+            "title": "Date"
           },
-        "y": {
-            "field": "Monthly_Ridership",
+          "y": {
+            "field": "ridership",
             "type": "quantitative",
-            "title": "Trip Count"
-        },
-        "color": {
-            "field": "Train_Line_Label",
+            "aggregate": "mean",
+            "title": "Average Daily Ridership"
+          },
+          "color": {
+            "field": "rail_line_name",
             "type": "nominal",
             "title": "Train Line",
-            "scale": {
-                "domain": [
-                    "LRT Ampang Line",
-                    "MRT Kajang Line", 
-                    "LRT Kelana Jaya Line",
-                    "Monorail Line",
-                    "KTMB ETS",
-                    "KTM Intercity",
-                    "KTM Komuter Utara"
-                ],
-                "range": [
-                    "#e41a1c",
-                    "#377eb8",
-                    "#4daf4a",
-                    "#984ea3",
-                    "#ff7f00",
-                    "#ffff33",
-                    "#a65628"                   
-                ]
+            "legend": {
+              "orient": "none", 
+              "legendX": 10, 
+              "legendY": 5
             }
+          },
+          "tooltip": [
+            {
+              "field": "rail_line_name",
+              "type": "nominal",
+              "title": "Train Line:"
+            },
+            {
+              "field": "parsed_date",
+              "type": "temporal",
+              "timeUnit": "yearmonth",
+              "title": "Date:"
+            },
+            {
+              "field": "ridership",
+              "type": "quantitative",
+              "aggregate": "mean",
+              "title": "Average Daily Ridership:",
+              "format": ",.0f"
+            }
+          ]
+        }
+      },
+      {
+        "mark": {
+          "type": "rule",
+          "color": "red",
+          "strokeDash": [4, 4],
+          "size": 2
         },
-        "tooltip": [
-            {"field": "Train_Line_Label", "type": "nominal", "title": "Train Line"},
-            {"field": "month_name", "type": "nominal", "title": "Month"},
-            {"field": "Monthly_Ridership", "type": "quantitative", "title": "Number of Trips", "format": ","}
-        ]
-    }
-},
-{
-    "transform": [
-        {"filter": "year_selection == 'Overall'"},
-        {"filter": "datum.Year >= 2021 && datum.Year <= 2024"},
-         {
-            "aggregate": [{
-            "op": "sum",
-            "field": "Ridership",
-            "as": "Yearly_Ridership"
-            }],
-            "groupby": ["Year", "Train_Line_Label"]
+        "encoding": {
+          "x": {
+            "datum": {"year": 2021, "month": 1},
+            "type": "temporal"
+          }
         }
-    ],
-    "mark": {
-        "type": "line",
-        "point": true
-    },
-    "encoding": {
-        "x": {
-            "field": "Year",
-            "type": "ordinal",
-            "axis": {
-                "labelAngle": 0,
-                "labelPadding": 8,
-                "titlePadding": 15
-            }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "align": "left",
+          "dx": 5,
+          "dy": -5,
+          "fontSize": 11,
+          "fontWeight": "bold",
+          "color": "red"
         },
-    "y": {
-        "field": "Yearly_Ridership",
-        "type": "quantitative",
-        "title": "Trip Count"
-    },
-    "color": {
-        "field": "Train_Line_Label",
-        "type": "nominal",
-        "title": "Train Line",
-        "scale": {
-            "domain": [
-                "LRT Ampang Line",
-                "MRT Kajang Line", 
-                "LRT Kelana Jaya Line",
-                "Monorail Line",
-                "KTMB ETS",
-                "KTM Intercity",
-                "KTM Komuter Utara"
-            ],
-            "range": [
-                "#e41a1c",
-                "#377eb8",
-                "#4daf4a",
-                "#984ea3",
-                "#ff7f00",
-                "#ffff33",
-                "#a65628"                   
-            ]
+        "encoding": {
+          "x": {
+            "datum": {"year": 2021, "month": 1},
+            "type": "temporal"
+          },
+          "y": {
+            "datum": 80000
+          },
+          "text": {
+            "value": "MCO Period"
+          }
         }
-    },
-    "tooltip": [
-        {"field": "Train_Line_Label", "type": "nominal", "title": "Train Line"},    
-        {"field": "Yearly_Ridership", "type": "quantitative", "title": "Number of Trips", "format": ","},
-        {"field": "Year", "type": "ordinal", "title": "Year"}
-                ]
-            }
+      },
+      {
+        "mark": {
+          "type": "rule",
+          "color": "orange",
+          "strokeDash": [4, 4],
+          "size": 2
+        },
+        "encoding": {
+          "x": {
+            "datum": {"year": 2022, "month": 1},
+            "type": "temporal"
+          }
         }
-    
-]
+      },
+      {
+        "mark": {
+          "type": "text",
+          "align": "left",
+          "dx": 5,
+          "dy": -5,
+          "fontSize": 11,
+          "fontWeight": "bold",
+          "color": "orange"
+        },
+        "encoding": {
+          "x": {
+            "datum": {"year": 2022, "month": 1},
+            "type": "temporal"
+          },
+          "y": {
+            "datum": 75000
+          },
+          "text": {
+            "value": "Endemic Phase"
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "align": "right",
+          "dx": -5,
+          "dy": 0,
+          "fontSize": 10,
+          "color": "green"
+        },
+        "encoding": {
+          "x": {
+            "datum": {"year": 2023, "month": 12},
+            "type": "temporal"
+          },
+          "y": {
+            "datum": 245000
+          },
+          "text": {
+            "value": "Highest Ridership: LRT Kelana Jaya"
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "align": "right",
+          "dx": -5,
+          "dy": 15,
+          "fontSize": 10,
+          "color": "#1f77b4"
+        },
+        "encoding": {
+          "x": {
+            "datum": {"year": 2023, "month": 12},
+            "type": "temporal"
+          },
+          "y": {
+            "datum": 35000
+          },
+          "text": {
+            "value": "Lowest: KTM Intercity"
+          }
+        }
+      }
+    ]
 }
 
 
