@@ -146,7 +146,9 @@
             "type": "ordinal",
             "title": "Year",
             "axis": {
-                "labelAngle": 0
+                "labelAngle": 0,
+                "labelFontSize": 10,
+                "titleFontSize": 12
             }
         },
     "y": {
