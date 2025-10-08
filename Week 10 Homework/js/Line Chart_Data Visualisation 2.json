@@ -4,8 +4,7 @@
     "height": 380,
     "title": {
         "text": "Ridership per Train Line (2021 - 2024)",
-        "anchor": "start",
-        "offset": 20
+        "offset": 50
     },
 
     "data": {
