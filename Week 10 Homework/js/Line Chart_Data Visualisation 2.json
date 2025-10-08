@@ -143,7 +143,7 @@
         "x": {
             "field": "year",
             "type": "ordinal",
-            "title": "",
+            "title": "Year",
             "axis": {
                 "labelAngle": 0,
                 "labelPadding": 8,
@@ -193,7 +193,7 @@
             ],
             "data": {
                 "values": [
-                    {"year": "2024", "annotation": "MRT Kajang", "y_position": 30000000}
+                    {"year": 2024, "annotation": "MRT Kajang", "y_position": 30000000}
                 ]
             },
             "mark": {
