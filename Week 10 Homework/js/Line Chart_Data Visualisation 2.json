@@ -85,19 +85,19 @@
             {
               "field": "rail_line_name",
               "type": "nominal",
-              "title": "Train Line:"
+              "title": "Train Line"
             },
             {
               "field": "parsed_date",
               "type": "temporal",
               "timeUnit": "yearmonth",
-              "title": "Date:"
+              "title": "Date"
             },
             {
               "field": "ridership",
               "type": "quantitative",
               "aggregate": "mean",
-              "title": "Average Daily Ridership:",
+              "title": "Average Daily Ridership",
               "format": ",.0f"
             }
           ]
