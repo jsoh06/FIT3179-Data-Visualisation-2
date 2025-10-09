@@ -53,9 +53,9 @@
         ],
         "mark": {
           "type": "circle",
-          "size": 120,
-          "strokeWidth": 2,
-          "fill": "transparent"
+          "size": 150,
+          "strokeWidth": 3,
+          "fillOpacity": 0.7
         },
         "encoding": {
           "longitude": {"field": "longitude_num", "type": "quantitative"},
@@ -66,7 +66,7 @@
             "title": "Train Line",
             "scale": {
               "domain": ["LRT Kelana Jaya", "LRT Ampang", "Interchange"],
-              "range": ["#e75480", "#FFA500", "#FF0000"]
+              "range": ["#00A651", "#FF8C00", "#DC143C"]
             }
           },
           "tooltip": [
